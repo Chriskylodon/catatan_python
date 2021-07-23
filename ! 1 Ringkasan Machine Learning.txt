@@ -1,0 +1,156 @@
+					coding		pemahaman
+
+regression
+	Linear Regreession		v		v
+	Multiple Linear Regression	v		v
+	Polynomial Regression		v		v
+	model_RD = Ridge()		v		
+	model_LS = Lasso()		v		
+	model_EN = ElasticNet()		v		
+	DTree				
+	Random Forest			
+
+
+classification
+	Logistic regression		v		v
+	Naive Bayes			v		v
+	DTree				v		v
+	Random Forest			v		v
+	SVM				v		v
+	KNN				v		v
+
+	
+clustering
+	KMeans				v		v
+	Hierarchical clustering		v		v
+
+
+
+
+
+association rule learning
+	apriori
+	eclat
+
+dimensional reduction
+	PCA				
+	Linear Description Analysis (LDA)
+
+Neural Networks
+	Artificial Neural Networks
+	Convolucional neural network
+	Recurrent neural network
+
+
+
+
+
+
+
+
+masalah(di KMeans, DTree, Random forest, SVM):
+
+in:
+a = 10
+b = a
+
+b = 5
+
+print(a)
+print(b)
+
+out:
+10
+5
+
+out:
+5
+5
+
+consider this masalah as done, ajaibly!
+
+di multiple linear regression masih belum mengerti sepenuhnya
+SVM juga masih belum mengerti sepenuhnya
+banyak sebetulnya
+
+----------------------------------------------------------------------------------------
+diddmomscfpve
+idmddom scfpve
+
+
+
+Import Library
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import seaborn as sns
+import 
+
+Data (statistika deskriptif)
+titanic = pd.read_csv(r'C:\Users\LENOVO\Documents\jupyter\dasar\dataset\data_titanic.csv')
+titanic.head()
+titanic.descrice()
+titanic.info()
+
+check merge(join di sql - kekurangan data)
+check data type (kekurangan data)
+check duplicate (kelebihan data)
+check outlier (kelebihan data)
+check missing values (kekurangan data)
+teknik pengambilan data - check EDA (kesalahan data)
+
+
+
+visualisasi
+
+garis: matplotlib.pyplot atau plt
+sebaran: seaborn atau sns
+correlation: sns.heatmap
+plot_confusion_matrix: from sklearn.metrics import plot_confusion_matrix
+roc_auc_curve: from sklearn.metrics import roc_auc_curve
+
+
+
+
+visual varians
+
+	---
+cuma gitu2 doang dari datanya
+	---
+
+
+
+
+
+visual prediksi
+	normalization
+	data train & data split
+	Bias and Variance trade off
+	regularization: Ridge, Lasso, ElasticNet
+
+	simple linear regression
+	multiple linear regression
+	polynomial regression
+		decision tree regressor (gaada)
+		random forest regressor (gaada)
+
+checking error if there is a data train & data split(testing) on prediction:	
+MAE
+MSE
+RMSE
+
+
+pengklasfikasian 
+- supervised (kualitatif/science)
+	metrics for classification
+	logistic regression			v
+	KNN					v
+	SVM					v
+	Decicion Tree				v
+	random forest				v
+	
+- unsupervised (kuantitatif/seni)
+	clustering
+	dimensionality reduction
+	recommender system

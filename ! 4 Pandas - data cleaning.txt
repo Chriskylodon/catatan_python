@@ -1,0 +1,376 @@
+Installing Pandas
+
+C:\Users\Your Name>pip install pandas
+
+Series : like a column in table
+DataFrame : like a table in Database
+https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.replace.html?highlight=replace#pandas.DataFrame.replace
+
+-------------------------------------------------------------------------------------
+Read File *.CSV and *.JSON
+
+import pandas as pd
+
+df = pd.read_csv('data.csv')
+print(df)
+print(df.to_string())
+
+df = pd.read_json('data.json')
+print(df.to_string()) 
+
+
+pd.set_option('display.max_columns', None)
+
+
+-------------------------------------------------------------------------------------
+Analyzing DataFrame (preparing data)
+
+df.head(10)	to see data from beginning
+df.tail(10)	to see data from ending
+df.info() 	to see column name, what data type, how many missing values
+
+df.describe() 			to see the y axis's count, mean, std, min value, 25%, 50%, 75%, max value 
+	The 50 percentile is the same as the median. 25% = Q1, 50% = Q2, 75% = Q3
+df.describe(exclude='number')	to see the x axis's count, unique, top, freq
+df.dtypes			to see every column data type
+df.iloc[]			to see the record on location written
+df.index			to see the index data
+grouped=df.groupby('column1')
+
+-------------------------------------------------------------------------------------
+(sometimes)Removing Duplicates (Data Cleaning - Duplicated)
+
+print(df.duplicated())
+df.drop_duplicates(inplace = True)
+print(df.to_string())
+
+
+-------------------------------------------------------------------------------------
+Split and Join Data
+
+df = pd.read_csv(r'data.csv')
+
+Split:
+x = df['column1']
+y = df['column2']
+
+Join:
+df = pd.merge(x,y)
+
+-------------------------------------------------------------------------------------
+Cleaning Wrong Format (Data Cleaning - Data Type)
+
+Pandas dtype	Python type	NumPy type							Usage
+object		str or mixed	string_, unicode_, mixed types					Text or mixed numeric and non-numeric values
+int64		int		int_, int8, int16, int32, int64, uint8, uint16, uint32, uint64	Integer numbers
+float64		float		float_, float16, float32, float64				Floating point numbers
+bool		bool		bool_								True/False values
+datetime64	datetime	datetime64[ns]							Date and time values
+timedelta[ns]	NA		NA								Differences between two datetimes
+category	NA		NA								Finite list of text values
+
+Wrong Values's format - df.dtypes
+
+penyelesaian (untuk sumbu y):
+pd.to_numeric()
+
+kategorikal, butuh penyelesaian (untuk sumbu x):
+pd.to_datetime()
+pd.to_timedelta()
+
+kategorikal (untuk sumbu x):
+df['column name'].unique()
+df['column name'].nunique() 	#num unique
+
+Wrong Values's format (sumbu y) - '?' 
+
+x = pd.to_numeric(df['normalized-losses'])		#error, tapi jadi keliatan values apa aja yg bikin error wrong values
+x = np.where(df['normalized-losses'] == '?')
+x = df['normalized-losses'].replace('?',np.NaN)		#bisa berenti disini, lalu lanjut ke .dropna()
+z = pd.to_numeric(x)
+y = z.median()						#bisa .median() .mean() .mode()
+a = z.fillna(y)
+
+Wrong Values's format (sumbu x)
+
+df['fuel-type'].unique()				#keliatan jika ada kategori yg salah(kelebihan 1 karakter)
+
+-------------------------------------------------------------------------------------
+Cleaning Empty Cells (data cleaning - Handling Missing Values)
+
+df.dropna()
+df.fillna()
+df.isna()
+df.isnull()
+df.isnull().sum()
+
+If you want to change the original DataFrame, use the 'inplace = True' argument
+
+1. dropna, lalu langsung lanjut ke berikutnya
+dropna:
+df_dropped = df.dropna()
+
+df = pd.read_csv('data.csv')
+df.dropna(inplace = True)
+print(df.to_string())
+
+2. isi dengan mean/median/mode, lalu lanjut ke berikutnya
+fillna:
+df = pd.read_csv('data.csv')
+df.fillna(130, inplace = True)
+
+df = pd.read_csv('data.csv')
+df["Calories"].fillna(130, inplace = True)
+
+df = pd.read_csv('data.csv')
+x = df["Calories"].mean()
+df["Calories"].fillna(x, inplace = True)
+print(df.to_string())
+
+3. isi dengan value tertentu(median dari 25% data terendah, median dari 25% data agak rendah, median 25% data agak tinggi, median dari 25% data tertinggi), lalu lanjut ke berikutnya
+
+melb_data['Car'].unique()
+
+melb_data['Price'].describe()
+melb_cheap     = melb_data[melb_data['Price']  <= melb_data['Price'].describe()['25%']]
+
+melb_medium    = melb_data[(melb_data['Price'] > melb_data['Price'].describe()['25%']) & 
+                           (melb_data['Price'] <= melb_data['Price'].describe()['50%'])] 
+
+melb_expensive = melb_data[(melb_data['Price'] > melb_data['Price'].describe()['50%']) & 
+                           (melb_data['Price'] <= melb_data['Price'].describe()['75%'])]
+
+melb_very      = melb_data[melb_data['Price']  > melb_data['Price'].describe()['75%']]
+
+print(melb_cheap['Car'].median())
+print(melb_medium['Car'].median())
+print(melb_expensive['Car'].median())
+print(melb_very['Car'].median())
+
+melb_data_copied = melb_data.copy()
+
+melb_data_copied['Car'].iloc[melb_cheap.index] = melb_data_copied['Car'].iloc[melb_cheap.index].fillna(melb_cheap['Car'].median())
+melb_data_copied['Car'].iloc[melb_medium.index] = melb_data_copied['Car'].iloc[melb_medium.index].fillna(melb_medium['Car'].median())
+melb_data_copied['Car'].iloc[melb_expensive.index] = melb_data_copied['Car'].iloc[melb_expensive.index].fillna(melb_expensive['Car'].median())
+melb_data_copied['Car'].iloc[melb_very.index] = melb_data_copied['Car'].iloc[melb_very.index].fillna(melb_very['Car'].median())
+
+
+in:
+#melb_data_copied.isnull().sum()
+melb_data_copied.iloc[:, 12:16].isnull().sum()
+
+out:
+Car                0
+Landsize           0
+BuildingArea    6450
+YearBuilt       5375
+dtype: int64
+
+
+
+array(melb_data['Price']) <= float(melb_data['Price'].quantile(.25))
+[1,2,3,4,5] <= 3
+
+x = np.where(arr == 4)
+
+-------------------------------------------------------------------------------------
+Outlier (pemahamannya : dengan menggunakan z scores)
+
+import scipy.stats as stats
+dfa = df['Price']
+z_scores = stats.zscore(dfa) 
+abs_z_scores = np.abs(z_scores)
+filtered_entries = (abs_z_scores < 3)
+new_df = dfa[filtered_entries]
+print(new_df)
+
+dfa => jumlah data 13580
+zscores => Each z-score tells us how many standard deviations away an individual value is from the mean.
+abs => pangkat 2 abis itu akar 2, menjadi positif semua
+filtered_entries => diambil yg zscoresnya < 3
+new_df => jumlah data 13348
+
+
+|-------------------------------------------------------------|
+|							      |
+|    data_numeric[data_boolean] => filtrasi data yg True      |
+|                                                             |
+|-------------------------------------------------------------|
+
+in:
+arr = np.array((1, 2, 3, 4, 5))
+x = 3
+y = arr <= x
+y
+
+out:
+array([ True,  True,  True, False, False])
+
+in:
+z = arr[y]
+z
+
+out:
+array([1, 2, 3])
+
+arr[y] => list_data_int[list_data_boolean]
+
+
+
+
+Outlier (pemahamannya: IQR)
+
+random_data = np.random.randn(500) * 20 + 20
+
+list_random_data = random_data.tolist()
+Q1 = np.quantile(list_random_data, .25)
+Q2 = np.quantile(list_random_data, .50)
+Q3 = np.quantile(list_random_data, .75)
+
+IQR = (Q3 - Q1) * 1.5
+batas_bawah= Q1-IQR
+batas_atas = Q3+IQR
+
+dengan perulangan:
+def find_outlier(yourlist):
+    outlier = []
+    for i in range(len(yourlist)):
+        if yourlist[i] > batas_atas:
+            outlier.append(yourlist[i])
+        if yourlist[i] < batas_bawah:
+            outlier.append(yourlist[i])
+        
+    return outlier
+
+in:
+find_outlier(random_data)
+
+out:
+[78.03696271263266, -36.93776928247584]
+
+
+
+kurang drop datanya
+kurang nyari index dari valuenya
+
+
+
+
+dengan >< :
+outliers = data[data['ColumnA']>upper_bound]
+outliers
+data.drop(index on above)
+
+outliers = data[data['ColumnA']<lower_bound]
+outliers
+data.drop(index on above)
+
+
+
+Outlier (pemahamannya: Deteksi Outlier menggunakan upper dan lower limit(dengan standard deviation))
+
+random_data = np.random.randn(500) * 20 + 20
+
+anomalies = []
+def find_anomalies(random_data):
+    #set upper and lower limit to 3 standard deviation
+    random_data_std = np.std(random_data)
+    random_data_mean = np.mean(random_data)
+    anomaly_cut_off = random_data_std*3
+    
+    lower_limit = random_data_mean - anomaly_cut_off
+    upper_limit = random_data_mean + anomaly_cut_off
+    print('lower_limit : {}'.format(lower_limit))
+    print('upper_limit : {}'.format(upper_limit))
+    
+    #generates outlier 
+    for outlier in random_data:
+        if outlier > upper_limit or outlier < lower_limit:
+            anomalies.append(outlier)
+    return anomalies
+
+find_anomalies(random_data)
+
+
+
+
+kurang drop datanya
+kurang nyari index dari valuenya kalau tidak diketahui index
+
+
+
+
+
+clear()	to remove all items from the list
+pop() to remove item by index and get its value
+remove() to remove items by value
+del remove items by index or slices
+
+
+df.drop(np.where(random_data = 78.03696271263266))
+df.drop(df.loc[df['line_race']==0].index, inplace=True)
+df.drop(df.index[df['line_race'] == 0], inplace = True)
+df.drop(df[df['line_race']==0].index)
+
+df = df.drop(some labels)
+df = df.drop(df[<some boolean condition>].index)
+df.drop(index)
+df.drop()
+
+gabisa:
+df.drop(find_outlier(random_data))
+a = [1,2,3,4,5,6,7,8,9]
+a = a.drop(labels=2, axis=0)
+random_data.drop(78.03696271263266)
+
+a = [1,2,3,4,5,6,7,8,9]
+a.index(5)
+
+-------------------------------------------------------------------------------------
+Correlation
+in:
+df.corr()
+
+out:
+            Duration     Pulse  Maxpulse  Calories
+  Duration  1.000000 -0.155408  0.009403  0.922721
+  Pulse    -0.155408  1.000000  0.786535  0.025120
+  Maxpulse  0.009403  0.786535  1.000000  0.203814
+  Calories  0.922721  0.025120  0.203814  1.000000
+
+sns.heatmap(disc_rev.corr(method='spearman'), annot=True)
+disc_rev.corr(method='spearman')
+
+corrmat = melb_data_NullHandled.corr()
+top_corr_features = corrmat.index
+plt.figure(figsize=(20,20))
+
+g = sns.heatmap(melb_data_NullHandled[top_corr_features].corr(), annot=True)
+
+-------------------------------------------------------------------------------------
+
+array	value bisa diubah, length tidak bisa diubah
+list	value bisa diubah, length bisa diubah
+tuple	value tidak bisa diubah, length tidak bisa diubah
+
+.tolist()
+array([1,2,3,4,5,2,4,3,2,4,7,9,5]) menjadi [1,2,3,4,5,2,4,3,2,4,7,9,5]
+
+data = pd.read_csv("nba.csv", index_col ="Name")
+first = data.loc["Avery Bradley"]
+second = data.loc["R.J. Hunter"]
+
+
+import scipy.stats as stats
+list_df = df['TotalCost']
+z_scores = stats.zscore(list_df) 
+abs_z_scores = np.abs(z_scores)
+filtered_entries = (abs_z_scores < 3)
+new_df = list_df[filtered_entries]
+print(new_df)
+
+filtered_entries
+
+df[][filtered_entries]
+
+jadi x buat di matplotlib doang

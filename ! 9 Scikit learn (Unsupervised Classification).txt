@@ -1,0 +1,351 @@
+Unsupervised Machine Learning
+
+Classification : giving boundary
+Clustering : grouping
+
+-----------------------------------------------------------------------------------------
+
+Classification
+
+Content Based Filtering : 
+berpaku pada objeknya(kesamaan)
+
+Collaborative Filtering : 
+berpaku pada subjeknya(kesamaan)
+
+--------------------------------
+Recommender System(File : Unsupervised Machine Learning - Recommendation System)
+
+CountVectorizer
+cscore -> cosine similarity
+
+Step 1 : Prepare the data
+Step 2 : Use CountVectorizer
+Step 3 : Menghitung Cosine Similarity
+Step 4 : Show the recommendation
+
+
+
+
+
+
+import pandas as pd
+import numpy as np
+import seaborn as sns
+
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+count_vectorizer = CountVectorizer(stop_words = 'english')
+matrix = count_vectorizer.fit_transform(documents)
+
+# beda antara dibikin dataframe sama engga(cuma array)
+## tanbahan : melihat kegunaan count vectorizer
+doc_array = matrix.toarray()
+df_mat = pd.DataFrame(doc_array, columns = count_vectorizer.get_feature_names(), index=['doc_WM', 'doc_DM', 'doc_DS'])
+df_mat
+count_vectorizer.get_feature_names()
+
+cosine_similarity(matrix)
+cscore = cosine_similarity(matrix)
+sns.heatmap(cscore, annot=True,
+           xticklabels = df_mat.index,
+           yticklabels = df_mat.index)
+
+
+
+
+
+
+cv = CountVectorizer()
+genre = cv.fit_transform(df['genre'])
+genre.toarray()
+cv.get_feature_names()
+
+cosine_similarity(genre) 
+## mencari yg sama dari lagu1, lagu2, lagu3, ..., lagu9
+coScore = cosine_similarity(genre)
+sns.heatmap(coScore, annot=True)
+
+
+
+
+cv = CountVectorizer()
+by_genre = cv.fit_transform(anime_not_null['genre'])
+	print(len(cv.get_feature_names()))
+	print(cv.get_feature_names())
+
+
+cv = CountVectorizer(tokenizer=lambda x: x.split(', '))
+by_genre = cv.fit_transform(anime_not_null['genre'])
+	print(len(cv.get_feature_names()))
+	print(cv.get_feature_names())
+
+coScore_anime = cosine_similarity(by_genre)
+coScore_anime
+
+
+
+--------------------------------------------------------------------------------------------
+Clustering
+
+K-Means clustering:
+Elbow Method
+
+Hierarchical Clustering: too slow for large data sets
+Agglomerative -> Additive Hierarchical Clustering (dari kecil/banyak cluster)
+Divisive -> dari besar/1 cluster
+
+Proximity Matrix - Euclidian Distance (selisihnya dipangkatin abis itu diakarin)
+Dendogram -> root-tree, dari dendogram yg kecil dihubungkan, lama2 jadi tree, tinggal pilih berapa cluster
+Linkage -> average linkage
+
+
+
+pemahamannya:
+
+dari jarak.
+bisa tiap 'point' dihitung jaraknya, ketemu jumlah clusternya.
+bisa menggunakan rumus, ketemu jumlah clusternya.
+
+1. Elbow Method (tentukan centroid/k)
+2. K-Means clustering
+3. Evaluation
+
+
+--------------------------------------------------------------------------------------------
+Distance Matrix
+
+Euclidian distance
+Manhattan distance (Cityblock distance)
+Cosine distance
+Hamming distance
+
+1-D input:
+	from scipy.spatial.distance import euclidean
+	from scipy.spatial.distance import cityblock
+	from scipy.spatial.distance import cosine
+	from scipy.spatial.distance import hamming
+
+p1 = (1, 0)
+p2 = (10, 2)
+
+res1 = euclidean(p1, p2)
+res2 = cityblock(p1, p2)
+res3 = cosine(p1, p2)
+res4 = hamming(p1, p2)
+
+print(res1)
+print(res2)
+print(res3)
+print(res4)
+
+ 9.21954445729
+11
+0.019419324309079777
+0.666666666667
+
+
+2-D input:
+	from scipy.spatial.distance import cdist
+	cdist(X, kmeanModel.cluster_centers_, 'euclidean')
+cdist:
+metricstr or callable, optional
+The distance metric to use. If a string, the distance function can be ‘braycurtis’, ‘canberra’, ‘chebyshev’, 
+‘cityblock’, ‘correlation’, 
+‘cosine’, ‘dice’, 
+‘euclidean’, 
+‘hamming’, ‘jaccard’, ‘jensenshannon’, ‘kulsinski’, ‘mahalanobis’, ‘matching’, ‘minkowski’, ‘rogerstanimoto’, ‘russellrao’, ‘seuclidean’, ‘sokalmichener’, ‘sokalsneath’, ‘sqeuclidean’, ‘wminkowski’, ‘yule’.
+
+
+
+distance = np.linalg.norm(a,b)
+
+--------------------------------------------------------------------------------------------
+Distortions
+
+You may be wondering “what exactly is the distortion?”. 
+The distortion is the sum of square errors (SSE) – 
+that’s 3 things that need to take place; 
+determine the error, -> cdist()
+square it, 
+then finally take the sum. / average -> 
+
+The “error” in this case is the difference between each data point coordinates and the centroid coordinates.
+
+	distortions = data point - centroids
+
+
+--------------------------------------------------------------------------------------------
+Inertia
+
+def inertia(points,clusters,centroids):
+    inertia = 0
+    k = np.unique(clusters)
+    points_belong_cluster = []
+    distt = 0
+    
+
+    #iterating with arrays --> np.nidter
+    for i in np.nditer(k):
+          some_points = [points[j] for j in range(len(points)) if clusters[j] == i]
+    
+          points_belong_cluster.append(some_points)
+
+          for j in range(len(points_belong_cluster[i])):
+              distt = distance(centroids[i],points_belong_cluster[i][j]) 
+
+    inertia += (distt / k)
+        
+
+    return inertia
+
+
+
+--------------------------------------------------------------------------------------------
+Elbow Method
+
+from sklearn.cluster import KMeans
+from scipy.spatial.distance import cdist
+
+X = df.drop(['Private_num','Unnamed: 0','Private', 'Outstate','Room.Board','Books','Personal','Expend','perc.alumni'],axis=1)
+
+distortions = []
+inertias = []
+mapping1 = {}
+mapping2 = {}
+K = range(1, 10)
+ 
+for k in K:
+    # Building and fitting the model
+    kmeanModel = KMeans(n_clusters=k).fit(X)
+    kmeanModel.fit(X)
+ 
+    distortions.append(sum(np.min(cdist(X, kmeanModel.cluster_centers_, 'euclidean'), axis=1)) / X.shape[0])
+    inertias.append(kmeanModel.inertia_)
+ 
+    mapping1[k] = sum(np.min(cdist(X, kmeanModel.cluster_centers_,'euclidean'), axis=1)) / X.shape[0]
+    mapping2[k] = kmeanModel.inertia_
+    
+centroid then minimum distance 
+    
+cdist = 2D array - input
+axis=1 -> nilai minimum di baris tsb
+np.min -> nilai minimum di baris tsb, diubah dari 2D array menjadi 1D array
+X.shape[0] = 777
+distortions -> data point - centroids
+distortions atau val -> rata2 dari nilai minimum dibagi 777
+
+inertia -> inertia += (distance / k)
+
+mapping -> mendata key dan value 
+mapping1 -> mendata distortions
+mapping2 -> mendata inertia
+
+
+
+for key, val in mapping1.items():
+    print(f'{key} : {val}')
+
+for key, val in mapping2.items():
+    print(f'{key} : {val}')
+
+
+plt.plot(K, distortions, 'bx-')
+plt.xlabel('Values of K')
+plt.ylabel('Distortion')
+plt.title('The Elbow Method using Distortion')
+plt.show()
+
+
+bacanya:
+x= k(jumlah cluster)
+y= dystortions(jarak centroid ke data point)
+jadi, kalo clusternya 1, jumlah jaraknya gede
+kalo clusternya 2, jumlah jaraknya setengahnya yg pertama
+dst
+
+
+cara lain:
+
+from sklearn.cluster import KMeans
+
+distortion = []
+
+for i in range(1,11):
+    kmeans = KMeans(n_clusters= i, init='k-means++', random_state=42)
+    kmeans.fit(x)
+    distortion.append(kmeans.inertia_)
+
+plt.plot(range(1,11), distortion)
+plt.title('The Elbow Method')
+plt.xlabel('Number of Cluster')
+plt.ylabel('distortion')
+plt.show()
+
+
+----------------------------------------------------------------------------------------------
+Clustering(K-Means, ELKI, EM)
+
+bikin scatter plot, 
+kan scatter plot butuh 2 variable(2 list), x,y
+
+from sklearn.cluster import KMeans
+model_km = KMeans(n_clusters=2, random_state=10)	bikin 2 centroid(entah koordinat berapa, list 1/0 untuk tiap baris, ) si random data
+y_km = model_km.fit_predict(df_X)			isi-df_X-nya 2 list. disini baru ada data df_X
+
+centers = model_km.cluster_centers_
+print(centers)						koordinat K. koordinat n-clusters nya. dari random data
+
+#bikin kolom baru
+#df['kluster'] = model_km.labels_			ada label dari random data
+df['kluster'] = y_km					hasil clusteringnya disimpan di kolom 'klusters'
+df
+
+#output = plt.scatter(x_scaled[:,0], x_scaled[:,1], s = 100, c = x_scaled['kluster'], marker = 'o', alpha = 1 )
+plt.scatter(df.iloc[:,2], df.iloc[:,3], s = 100, c = df['kluster'], marker = 'o', alpha = 1)
+#plt.scatter(centers[:,0], centers[:,1], c='red', s=200, alpha=1 , marker='o')
+plt.title('Hasil Klustering K-Means')
+#plt.colorbar(x_scaled['kluster'])
+plt.show()
+
+
+----------------------------------------------------------------------------------------------
+Evaluation
+
+from sklearn.metrics import classification_report
+y_pred_km = model_km.predict(x_test)
+print(classification_report(y_test,y_pred_km))
+
+
+              precision    recall  f1-score   support
+
+           0       0.88      0.45      0.59        47
+           1       0.80      0.97      0.88       109
+
+    accuracy                           0.81       156
+   macro avg       0.84      0.71      0.74       156
+weighted avg       0.82      0.81      0.79       156
+
+
+		Predicted/classified
+			Negative	Positive
+Actual |-    Negative	TN		FP
+       |-    Positive	FN		TP
+
+
+		Predicted/classified
+			Negative	Positive
+Actual |-    Negative	998		0
+       |-    Positive	1		1
+
+precision 	TP/IP+FP		TP/total predicted positive
+recall		TP/IP+FN		TP/total actual positive
+
+fi-score    	F1 Score might be a better measure to use if we need to seek a balance between Precision and Recall AND there is an uneven class distribution (large number of Actual Negatives).
+
+support		2*(Precision*Recall)/(Precision+Recall)
+
+accuracy	TP+TN/TP+FP+FN+TN
+macro avg
+weighted average

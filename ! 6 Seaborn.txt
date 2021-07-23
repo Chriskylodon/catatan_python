@@ -1,0 +1,95 @@
+Installing Seaborn
+
+C:\Users\Your Name>pip install seaborn --upgrade
+
+-------------------------------------------------------------------------------------------
+
+penguins = sns.load_dataset('penguins')
+penguins
+
+Relational:
+sns.relplot(x='total_bill',y='tip', data= tips, hue = 'time')
+sns.relplot(x='total_bill',y='tip', data= tips, hue = 'sex', col='time', row = 'day') 
+
+Distribution:
+sns.displot(penguins, x='flipper_length_mm')
+sns.displot(tips, x='size', discrete=True)
+sns.displot(tips, x='size', bins=True)
+sns.displot(tips, x='total_bill', hue= 'sex')
+sns.displot(tips, x='total_bill', hue='time', col='sex)
+sns.displot(tips, x='total_bill', y='tip')
+sns.displot(tips, x='total_bill', y='tip', kind='kde')
+
+Categorical: 
+sns.catplot(data=tips, x='total_bill', y='tip',kind='swarm')
+sns.catplot(data=tips, x='day', y='total_bill',)
+sns.catplot(data=tips, x='size', y='total_bill')
+sns.catplot(data=tips, x='day', y='total_bill', kind='box')
+sns.catplot(data=tips, x='day', y='total_bill', kind='violin', hue='sex',split=True)
+sns.catplot(data=tips, x='day', y='total_bill', kind='bar')
+
+Regression:
+sns.regplot(data=tips, x="total_bill", y="tip");
+sns.lmplot(data=tips, x='total_bill', y='tip', hue='sex')
+
+
+
+
+
+multiple:
+tips = sns.load_dataset("tips")
+g = sns.FacetGrid(tips, col="time")
+
+g = sns.FacetGrid(tips, col="time")
+g.map(sns.histplot, "tip")
+
+g = sns.FacetGrid(tips, col="sex", hue="smoker")
+g.map(sns.scatterplot, "total_bill", "tip", alpha=.7)
+g.add_legend()
+
+g = sns.FacetGrid(tips, row="smoker", col="time", margin_titles=True)
+g.map(sns.regplot, "size", "total_bill", color=".3", fit_reg=False, x_jitter=.1)
+
+g = sns.FacetGrid(tips, col="day", height=4, aspect=.5)
+g.map(sns.barplot, "sex", "total_bill", order=["Male", "Female"])
+
+ordered_days = tips.day.value_counts().index
+g = sns.FacetGrid(tips, row="day", row_order=ordered_days,
+                  height=1.7, aspect=4,)
+g.map(sns.kdeplot, "total_bill")
+
+pal = dict(Lunch="seagreen", Dinner=".7")
+g = sns.FacetGrid(tips, hue="time", palette=pal, height=5)
+g.map(sns.scatterplot, "total_bill", "tip", s=100, alpha=.5)
+g.add_legend()
+
+attend = sns.load_dataset("attention").query("subject <= 12")
+g = sns.FacetGrid(attend, col="subject", col_wrap=4, height=2, ylim=(0, 10))
+g.map(sns.pointplot, "solutions", "score", order=[1, 2, 3], color=".3", ci=None)
+
+with sns.axes_style("white"):
+    g = sns.FacetGrid(tips, row="sex", col="smoker", margin_titles=True, height=2.5)
+g.map(sns.scatterplot, "total_bill", "tip", color="#334488")
+g.set_axis_labels("Total bill (US Dollars)", "Tip")
+g.set(xticks=[10, 30, 50], yticks=[2, 6, 10])
+g.fig.subplots_adjust(wspace=.02, hspace=.02)
+
+g = sns.FacetGrid(tips, col="smoker", margin_titles=True, height=4)
+g.map(plt.scatter, "total_bill", "tip", color="#338844", edgecolor="white", s=50, lw=1)
+for ax in g.axes.flat:
+    ax.axline((0, 0), slope=.2, c=".2", ls="--", zorder=0)
+g.set(xlim=(0, 60), ylim=(0, 14))
+
+g = sns.FacetGrid(tips, col="smoker", margin_titles=True, height=4)
+g.map(plt.scatter, "total_bill", "tip", color="#338844", edgecolor="white", s=50, lw=1)
+for ax in g.axes.flat:
+    ax.axline((0, 0), slope=.2, c=".2", ls="--", zorder=0)
+g.set(xlim=(0, 60), ylim=(0, 14))
+
+
+
+
+
+
+
+

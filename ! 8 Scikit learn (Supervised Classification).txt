@@ -1,0 +1,213 @@
+yg ujungnya ROC AUC Curve
+belom bisa: bikin model yg pake grid searc cv
+
+#model supervised regression
+model_LR = LinearRegression()
+model_RD = Ridge()
+model_LS = Lasso()
+model_EN = ElasticNet()
+
+#model supervised classification
+model_LR = LogisticRegression()
+model_KNN = KNeighborsClassifier(n_neighbors=25)
+SVM
+DTree
+Random Forest
+
+----------------------------------------------------------------------------------------
+
+from sklearn.neighbors import KNeighborsClassifier
+round(np.sqrt(X_train.shape[0]))
+model_KNN = KNeighborsClassifier(n_neighbors=25)
+#training data
+model_KNN.fit(X_train, y_train)
+y_pred_knn = model_KNN.predict(X_test)
+
+
+----------------------------------------------------------------------------------------
+
+print(classification_report(y_test, y_pred_knn))
+plot_confusion_matrix(model_KNN, X_test, y_test)
+roc_auc_score(y_test, y_pred_knn)
+
+
+from sklearn.metrics import roc_curve
+
+knn_fpr, knn_tpr, _ = roc_curve(y_test, y_pred_knn)
+
+
+# plot the roc curve for the model
+plt.plot(knn_fpr, knn_tpr, marker='.', label='KNN')
+
+
+# axis labels
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+
+# show the legend
+plt.legend()
+
+# show the plot
+plt.show()
+
+# lOGISTIC REGRESSION : 0.78
+# KNN : 0.69
+
+
+
+----------------------------------------------------------------------------------------
+SMOTE (Synthetic Minority Oversampling Technique)
+
+
+os = SMOTE(sampling_strategy='minority',random_state = 123,k_neighbors=5)
+os.fit_resample(train_X,train_Y)
+
+
+
+
+from imblearn.over_sampling import SMOTE
+
+#handle imbalance class using oversampling minority class with smote method
+os = SMOTE(sampling_strategy='minority',random_state = 123,k_neighbors=5)
+train_smote_X,train_smote_Y = os.fit_resample(train_X,train_Y)
+
+train_smote_X = pd.DataFrame(data = train_smote_X,columns=train_X.columns)
+train_smote_Y = pd.DataFrame(data = train_smote_Y)
+
+#Proportion before smote
+train_Y.value_counts()
+
+#Proportion after smote
+train_smote_Y.value_counts()
+
+----------------------------------------------------------------------------------------
+
+
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from imblearn.over_sampling import SMOTE		#Buat SVM, DTree, Random Forest
+from sklearn.preprocessing import StandardScaler	#Buat SVM
+from sklearn.svm import SVC				#Buat SVM
+from sklearn import tree				#Buat DTree
+import graphviz						#Buat DTree
+from sklearn.tree import export_graphviz		#Buat DTree
+from sklearn.ensemble import RandomForestClassifier	#Buat Random Forest
+from sklearn.linear_model import LogisticRegression	#Buat Logistic Regression
+from sklearn.neighbors import KNeighborsClassifier	#Buat KNearesstNeighbor
+
+
+from sklearn.model_selection import GridSearchCV	#Buat SVM, DTree, Random Forest
+
+
+	#Evaluation
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_auc_score
+----------------------------------------------------------------------------------------
+
+
+
+
+
+#Data Cleaning
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+#Encoding Variables
+from sklearn.preprocessing import LabelEncoder
+
+#Data Partition
+from sklearn.model_selection import train_test_split
+
+#SMOTE (Synthetic Minority Oversampling Technique) 
+from imblearn.over_sampling import SMOTE
+
+
+
+
+
+
+#SVM (Support Vector Machine)
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV
+
+	#Evaluation
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_auc_score
+
+
+
+
+
+
+
+
+
+#Decision Tree
+from sklearn import tree
+import graphviz
+from sklearn.tree import export_graphviz
+
+	#Evaluation
+from sklearn.metrics import classification_report
+from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_auc_score
+
+
+
+
+
+
+
+#Random Forest
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+
+	#Evaluation
+from sklearn.metrics import classification_report
+from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_auc_score
+
+----------------------------------------------------------------------------------------
+
+
+#Data Cleaning
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+
+#Logistic Regression
+import statsmodels.api as sm
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+from sklearn.linear_model import LogisticRegression
+
+	#Evaluation
+from sklearn.metrics import classification_report
+from sklearn.metrics import plot_confusion_matrix
+from sklearn.metrics import roc_auc_score
+
+#KNN 
+from sklearn.neighbors import KNeighborsClassifier
+
+	#Evaluation
+from sklearn.metrics import classification_report
+from sklearn.metrics import plot_confusion_matrix
+from sklearn.metrics import roc_curve
+
+#SVM
+from sklearn.svm import SVC

@@ -1,0 +1,134 @@
+Installing Matplotlib
+
+C:\Users\Your Name>pip install matplotlib
+
+import matplotlib
+print(matplotlib.__version__)
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+-----------------------------------------------------------------------------------------------
+
+plt.plot()
+
+
+
+
+
+x = np.array([80, 85, 90, 95, 100, 105, 110, 115, 120, 125])
+y = np.array([240, 250, 260, 270, 280, 290, 300, 310, 320, 330])
+
+plt.plot(x,y)
+
+
+
+
+
+
+scala sumbu x
+scala sumbu y
+
+isinya
+
+
+judul
+label scala sumbu x
+label scala sumbu y
+
+
+
+
+
+
+fig = plt.figure()
+ax = plt.axes ()
+
+set_xlim([70,130])
+set_ylim([230,330])
+
+x = np.array([80, 85, 90, 95, 100, 105, 110, 115, 120, 125])
+y = np.array([240, 250, 260, 270, 280, 290, 300, 310, 320, 330])
+
+plt.plot(x,y)
+plt.scatter(x, y, s=sizes, alpha=0.5, cmap='nipy_spectral')
+plt.bar(x,y, width = 0.1, height = 0.1, color = "red")
+plt.hist(x)
+
+plt.pie(y, labels = mylabels, explode = myexplode, shadow = True, colors = mycolors)
+
+plt.title("Sports Watch Data", loc = 'left')
+plt.xlabel("Average Pulse")
+plt.ylabel("Calorie Burnage")
+
+plt.grid(color = 'green', linestyle = '--', linewidth = 0.5)
+plt.plot(ypoints, ls = ':')
+plt.plot(ypoints, marker = '*')
+
+plt.show()
+
+
+
+
+
+
+
+
+
+
+scatter:
+colors = np.random.randint(100, size=(100))
+sizes = 10 * np.random.randint(100, size=(100))
+plt.colorbar()
+
+pie:
+mylabels = ["Apples", "Bananas", "Cherries", "Dates"]
+myexplode = [0.2, 0, 0, 0]
+mycolors = ["black", "hotpink", "b", "#4CAF50"]
+plt.legend(title = "Four Fruits:")
+
+
+line:
+Style	Or
+'solid' (default)	'-'	
+'dotted'	':'	
+'dashed'	'--'	
+'dashdot'	'-.'	
+'None'	'' or ' '
+
+
+marker:
+Marker	Description
+'o'	Circle	
+'*'	Star	
+'.'	Point	
+','	Pixel	
+'x'	X	
+'X'	X (filled)	
+'+'	Plus	
+'P'	Plus (filled)	
+'s'	Square	
+'D'	Diamond	
+'d'	Diamond (thin)	
+'p'	Pentagon	
+'H'	Hexagon	
+'h'	Hexagon	
+'v'	Triangle Down	
+'^'	Triangle Up	
+'<'	Triangle Left	
+'>'	Triangle Right	
+'1'	Tri Down	
+'2'	Tri Up	
+'3'	Tri Left	
+'4'	Tri Right	
+'|'	Vline	
+'_'	Hline
+
+
+
+
+
+
+
+
+

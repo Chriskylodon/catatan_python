@@ -1,0 +1,302 @@
+Installing Numpy
+
+C:\Users\Your Name>pip install numpy
+
+in:
+import numpy as np
+print(np.__version__)
+
+out:
+1.16.3
+
+---------------------------------------------------------------------------------------
+
+Creating Arrays
+
+Below is a list of all data types in NumPy and the characters used to represent them.
+
+i - integer
+b - boolean
+u - unsigned integer
+f - float
+c - complex float
+m - timedelta
+M - datetime
+O - object
+S - string
+U - unicode string
+V - fixed chunk of memory for other type ( void )
+
+in:
+#arr = np.array([1, 2, 3, 4, 5], dtype='i')
+#arr = np.array((1, 2, 3, 4, 5))
+#arr = np.array(42)
+#arr = np.array([1, 2, 3, 4, 5])
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+#arr = np.array([[[1, 2, 3], [4, 5, 6]], [[1, 2, 3], [4, 5, 6]]])
+
+print(arr)
+print(type(arr))
+print(arr.ndim)
+print(arr[1,2])
+
+newarr = arr.astype('i')
+
+print(newarr)
+print(newarr.dtype)
+
+out:
+[[1,2,3]
+ [4,5,6]]
+<class 'numpy.ndarray'>
+2
+5
+
+[[1,2,3]
+ [4,5,6]]
+int32
+
+------------------------------------------------------------------------------------------
+
+Array Slicing
+
+[index] : index of array
+[start:end] : We pass slice instead of index like this.
+[start:end:step] : We can also define the step, like this.
+
+If we don't pass start its considered 0
+If we don't pass end its considered length of array in that dimension
+If we don't pass step its considered 1
+
+[0:2] ujung dikurang 1
+
+in:
+arr = np.array([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]])
+print(arr[1, 1:4])
+
+arr = np.array([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]])
+print(arr[0:2, 2])
+
+arr = np.array([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]])
+print(arr[0:2, 1:4])
+
+out:
+[3 8]
+[7 8 9]
+[[2 3 4]
+ [7 8 9]]
+
+
+in:
+arr = np.array([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]])
+
+print(arr[0])
+
+print(arr[0,1])
+print(arr[0][1])
+
+print(arr[1,1])
+print(arr[1][1])
+
+print(arr[0:1][0])
+print(arr[0:1, 0])
+print(arr[0:2, 0])
+print(arr[0:2, 1:3])
+
+out:
+[7 8 9]
+[1 2 3 4 5]
+2
+2
+7
+7
+[1 2 3 4 5]
+[1]
+[1 6]
+[[2 3]
+ [7 8]]
+
+------------------------------------------------------------------------------------------
+Array Copy vs View
+
+in:
+arr = np.array([1, 2, 3, 4, 5])
+x = arr.copy()
+arr[0] = 42
+
+print(arr)
+print(x)
+
+out:
+[42  2  3  4  5]
+[1 2 3 4 5]
+
+x = arr.copy() : The 'copy' owns the data and any changes made to the copy will not affect original array, and any changes made to the original array will not affect the copy.
+x = arr.view() : The 'view' does not own the data and any changes made to the view will affect the original array, and any changes made to the original array will affect the view.
+
+------------------------------------------------------------------------------------------
+Array Shape and Reshape
+
+in:
+arr = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+
+print(arr)
+print(arr.shape)
+print(arr.reshape(2, 4))
+print(arr.reshape(2, 4).base)
+
+newarr = arr.reshape(2,4)
+
+print(newarr)
+print(newarr.shape)
+
+out:
+[1 2 3 4 5 6 7 8]
+(8,)
+[[1 2 3 4]
+ [5 6 7 8]]
+[1 2 3 4 5 6 7 8]
+[[1 2 3 4]
+ [5 6 7 8]]
+(2, 4)
+
+
+------------------------------------------------------------------------------------------
+Array Split and Join
+
+np.array_split((arr, 3, axis=1))
+np.hsplit((arr, 3)) 		rows 	horizontal 	height
+np.vsplit((arr, 3))		columns	vertical	width
+np.dsplit((arr, 3))		depth
+
+np.concatenate((arr1, arr2), axis=1)
+np.stack((arr1, arr2))
+np.hstack((arr1, arr2)) 	rows 	horizontal 	height
+np.vstack((arr1, arr2))		columns	vertical	width
+np.dstack((arr1, arr2))		depth
+
+in:
+arr = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15], [16, 17, 18]])
+
+newarr = np.hsplit(arr, 3)
+
+print(newarr)
+print(newarr[0])
+print(newarr[1])
+print(newarr[2])
+
+newestarr = np.hstack(newarr)
+
+print(newestarr)
+
+out:
+[array([[ 1],
+       [ 4],
+       [ 7],
+       [10],
+       [13],
+       [16]]), array([[ 2],
+       [ 5],
+       [ 8],
+       [11],
+       [14],
+       [17]]), array([[ 3],
+       [ 6],
+       [ 9],
+       [12],
+       [15],
+       [18]])]
+[[ 1]
+ [ 4]
+ [ 7]
+ [10]
+ [13]
+ [16]]
+[[ 1  2  3]
+ [ 4  5  6]
+ [ 7  8  9]
+ [10 11 12]
+ [13 14 15]
+ [16 17 18]]
+
+------------------------------------------------------------------------------------------
+Searching Arrays
+
+np.where()
+np.searchsorted()
+
+in:
+arr = np.array([1, 2, 3, 4, 5, 4, 4])
+x = np.where(arr == 4)
+y = np.where(arr%2 == 0)
+z = np.where((arr == 4)|(arr == 2))
+print(x)
+print(y)
+print(z)
+
+out:
+(array([3, 5, 6]),)
+(array([1, 3, 5, 7]),)
+(array([1, 3, 5, 6]),)
+
+------------------------------------------------------------------------------------------
+Sorting Arrays
+
+
+in:
+arr = np.array([3, 2, 0, 1])
+reverse_order = np.sort(arr)[::-1]
+
+print(np.sort(arr))
+print(reverse_order)
+
+out:
+[0 1 2 3]
+[3 2 1 0]
+
+------------------------------------------------------------------------------------------
+Array Iterating
+
+np.nditer()
+np.ndenumerate
+
+in:
+
+
+out:
+
+
+
+------------------------------------------------------------------------------------------
+Filter Array
+
+
+arr = np.array([1, 2, 3, 4, 5, 6, 7])
+
+# Create an empty list
+filter_arr = []
+
+# go through each element in arr
+for element in arr:
+  # if the element is completely divisble by 2, set the value to True, otherwise False
+  if element % 2 == 0:
+    filter_arr.append(True)
+  else:
+    filter_arr.append(False)
+
+newarr = arr[filter_arr]
+
+print(filter_arr)
+print(newarr)
+
+
+
+
+arr = np.array([1, 2, 3, 4, 5, 6, 7])
+
+filter_arr = arr % 2 == 0
+
+newarr = arr[filter_arr]
+
+print(filter_arr)
+print(newarr)

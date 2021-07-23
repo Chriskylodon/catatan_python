@@ -1,0 +1,458 @@
+visual prediksi
+	data train & data split
+
+	simple linear regression
+	multiple linear regression
+		regularization: Ridge, Lasso, ElasticNet
+	polynomial regression
+
+
+checking error if there is a data train & data split(testing) on prediction:	
+MAE
+MSE
+RMSE
+
+	normalization
+	Bias and Variance trade off
+	decision tree regressor
+	random forest regressor
+-------------------------------------------------------------------------------------------
+Linear Regression
+tinggal masukkin nilai x sama y doang
+
+
+
+
+#to make scatter
+import matplotlib.pyplot as plt
+
+x = [5,7,8,7,2,17,2,9,4,11,12,9,6]
+y = [99,86,87,88,111,86,103,87,94,78,77,85,86]
+
+plt.scatter(x, y)
+plt.show()
+
+
+
+
+#to make line ar
+import matplotlib.pyplot as plt
+from scipy import stats
+
+x = [5,7,8,7,2,17,2,9,4,11,12,9,6]
+y = [99,86,87,88,111,86,103,87,94,78,77,85,86]
+
+slope, intercept, r, p, std_err = stats.linregress(x, y)
+
+def myfunc(x):
+  return slope * x + intercept
+
+mymodel = list(map(myfunc, x))
+
+plt.scatter(x, y)
+plt.plot(x, mymodel)
+plt.show()
+
+
+
+
+#It is important to know how the relationship between the values of the x-axis and the values of the y-axis is, if there are no relationship the linear regression can not be used to predict anything.
+#This relationship - the coefficient of correlation - is called r.
+#The r value ranges from -1 to 1, where 0 means no relationship, and 1 (and -1) means 100% related.
+
+from scipy import stats
+
+x = [5,7,8,7,2,17,2,9,4,11,12,9,6]
+y = [99,86,87,88,111,86,103,87,94,78,77,85,86]
+
+slope, intercept, r, p, std_err = stats.linregress(x, y)
+
+print(r)
+
+
+
+
+
+#to make both - predict future values
+from scipy import stats
+
+x = [5,7,8,7,2,17,2,9,4,11,12,9,6]
+y = [99,86,87,88,111,86,103,87,94,78,77,85,86]
+
+slope, intercept, r, p, std_err = stats.linregress(x, y)
+
+def myfunc(x):
+  return slope * x + intercept
+
+speed = myfunc(10)
+
+print(speed)
+
+-------------------------------------------------------------------------------------------
+Polynomial Regression
+ribet
+
+
+
+#to make scatter
+import matplotlib.pyplot as plt
+
+x = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]
+y = [100,90,80,60,60,55,60,65,70,70,75,76,78,79,90,99,99,100]
+
+plt.scatter(x, y)
+plt.show()
+
+
+
+
+
+
+import numpy
+import matplotlib.pyplot as plt
+
+x = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]
+y = [100,90,80,60,60,55,60,65,70,70,75,76,78,79,90,99,99,100]
+
+mymodel = numpy.poly1d(numpy.polyfit(x, y, 3))
+
+myline = numpy.linspace(1, 22, 100)
+
+plt.scatter(x, y)
+plt.plot(myline, mymodel(myline))
+plt.show()
+
+
+
+
+
+import numpy
+from sklearn.metrics import r2_score
+
+x = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]
+y = [100,90,80,60,60,55,60,65,70,70,75,76,78,79,90,99,99,100]
+
+mymodel = numpy.poly1d(numpy.polyfit(x, y, 3))
+
+print(r2_score(y, mymodel(x)))
+
+
+
+
+
+
+
+import numpy
+from sklearn.metrics import r2_score
+
+x = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]
+y = [100,90,80,60,60,55,60,65,70,70,75,76,78,79,90,99,99,100]
+
+mymodel = numpy.poly1d(numpy.polyfit(x, y, 3))
+
+speed = mymodel(17)
+print(speed)
+
+
+-------------------------------------------------------------------------------------------
+Multiple Regression
+bisa
+
+in:
+import pandas
+from sklearn import linear_model
+
+df = pandas.read_csv("cars.csv")
+
+X = df[['Weight', 'Volume']]
+y = df['CO2']
+
+regr = linear_model.LinearRegression()
+regr.fit(X, y)
+
+#predict the CO2 emission of a car where the weight is 2300kg, and the volume is 1300cm3:
+predictedCO2 = regr.predict([[2300, 1300]])
+
+print(predictedCO2)
+
+
+out:
+[107.2087328]
+
+
+
+
+
+in:
+import pandas
+from sklearn import linear_model
+
+df = pandas.read_csv("cars.csv")
+
+X = df[['Weight', 'Volume']]
+y = df['CO2']
+
+regr = linear_model.LinearRegression()
+regr.fit(X, y)
+
+print(regr.coef_)
+
+
+out:
+[0.00755095 0.00780526]
+
+-------------------------------------------------------------------------------------------
+Linear Regression
+
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+
+Tahapan dalam membuaty Model Linear Regression
+1. Memisahkan Variabel Independen (Feature) dan Dependen (Target)
+2. Memisahkan Data Train dan Test
+3. Training Model (Dengan data Train)
+4. Mendapatkan Slope dan Intercept
+5. Bandingkan Prediksi dengan Actual
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------
+Multiple Regression
+
+data = pd.read_csv(r'C:\Users\HP.LAPTOP-5BTBEJFV\Documents\data science\MODULE 3\Admission_Predict.csv')
+data = data.drop('Serial No.', axis = 1)
+data
+
+# memisahkan variabel independedn dan dependen
+x = data.drop('Chance of Admit ', axis=1)
+y = data['Chance of Admit ']
+
+# Train Test Split
+x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=.2, random_state=42)
+
+# Model Training
+mlr = LinearRegression()
+mlr.fit(x_train, y_train)
+
+#See coeffient of all variables
+coefficient = pd.DataFrame({'Variabel': x.columns.values, 'Coefficient':mlr.coef_})
+coefficient.sort_values('Coefficient', ascending=False)
+
+
+
+
+y_pred = mlr.predict(x_test)
+compare = pd.DataFrame({'Actual': y_test.values.flatten(), 'Predicted':y_pred})
+compare.plot(kind='line', figsize=(16, 4))
+
+
+
+
+mse  = metrics.mean_squared_error(y_test, y_pred)
+mae  = metrics.mean_absolute_error(y_test, y_pred)
+rmse = np.sqrt(metrics.mean_squared_error(y_test, y_pred))
+r2   = metrics.r2_score(y_test, y_pred)
+
+print(f'Mean Squared Error (MSE): {mse}')
+print(f'Mean Absolute Error (MAE): {mae}')
+print(f'Root Mean Squared Error (RMSE): {rmse}')
+print(f'R2 Score (R2): {r2}')
+
+----------------------------------------------------------------------------------------------
+Polynomial Regression
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
+from sklearn.metrics import mean_squared_error as mse
+
+#bikin dataframe, kolomnya x,y
+x = np.arange(0, 270, 10)
+y = np.cos(x * np.pi/180) + np.random.normal(0, 0.15, len(x))
+df = pd.DataFrame({'x':x, 'y':y})
+
+	#visualize data:
+	plt.style.use('seaborn')
+	plt.plot(df['x'], df['y'], 'o')
+	plt.show()
+
+df1 = df.copy()
+
+model_LR = LinearRegression()
+model_RD = Ridge()
+model_LS = Lasso()
+model_EN = ElasticNet()
+
+#fitting
+model_LR.fit(df1[['x']], df1['y'])
+model_RD.fit(df1[['x']], df1['y'])
+model_LS.fit(df1[['x']], df1['y'])
+model_EN.fit(df1[['x']], df1['y'])
+
+#predicting
+df1['y_LR'] = model_LR.predict(df[['x']])
+df1['y_RD'] = model_RD.predict(df[['x']])
+df1['y_LS'] = model_LS.predict(df[['x']])
+df1['y_EN'] = model_EN.predict(df[['x']])
+
+	#visualize prediction
+	plt.plot(df1['x'], df1['y'], 'k.')
+	plt.plot(df1['x'], df1['y_LR'], 'm-')
+	plt.plot(df1['x'], df1['y_RD'], 'b-')
+	plt.plot(df1['x'], df1['y_LS'], 'r-')
+	plt.plot(df1['x'], df1['y_EN'], 'g-')
+	plt.xlabel('Variabel X')
+	plt.ylabel('Variabel y')
+	plt.legend(['Data', 'Linear', 'Ridge', 'Lasso', 'ElasticNet'])
+	plt.show()
+
+#uji RMSE
+print('RMSE y_LR: ', np.sqrt(mse(df1['y'], df1['y_LR'])))
+print('RMSE y_RD: ', np.sqrt(mse(df1['y'], df1['y_RD'])))
+print('RMSE y_LS: ', np.sqrt(mse(df1['y'], df1['y_LS'])))
+print('RMSE y_EN: ', np.sqrt(mse(df1['y'], df1['y_EN'])))
+
+	#lasso, ridge, elasticnet gugur. tinggal linear regression
+
+#kolomnya nambah jadi x, y, x2, x3, x4, ... , x9
+for i in range(2, 10):
+    df1[f'x{i}'] = df1['x'] ** i
+
+#kolomnya nambah jadi x, y, x2, x3, x4, ... , x9, y_poly
+model_poly = LinearRegression()
+model_poly.fit(df1[['x', 'x2']], df1['y'])
+df1['y_poly'] = model_poly.predict(df1[['x', 'x2']])
+
+#kolomnya nambah jadi x, y, x2, x3, x4, ... , x9, y_poly, y_poly2, y_poly3, y_poly4, y_poly5
+model_poly = LinearRegression()
+xn = ['x']
+for i in range(2, 6):
+    xn.append(f'x{i}')
+    model_poly.fit(df1[xn], df1['y']) # fitting model
+    df1[f'y_Poly{i}'] = model_poly.predict(df1[xn]) #prediksi
+
+	#visualsasi
+	plt.plot(df1['x'], df1['y'], 'k.')
+	plt.plot(df1['x'], df1['y_Poly2'], 'm-')
+	plt.plot(df1['x'], df1['y_Poly3'], 'b-')
+	plt.plot(df1['x'], df1['y_Poly4'], 'r-')
+	plt.plot(df1['x'], df1['y_Poly5'], 'g-')
+	plt.legend(['Data', 'Pangkat2', 'Pangkat3', 'Pangkat4', 'Pangkat5'])
+	plt.xlabel('Variabel X')
+	plt.ylabel('Variabel Y')
+	plt.show()
+
+#uji RMSE
+print('RMSE y_Poly2: ', np.sqrt(mse(df1['y'], df1['y_Poly2'])))
+print('RMSE y_Poly3: ', np.sqrt(mse(df1['y'], df1['y_Poly3'])))
+print('RMSE y_Poly4: ', np.sqrt(mse(df1['y'], df1['y_Poly4'])))
+print('RMSE y_Poly5: ', np.sqrt(mse(df1['y'], df1['y_Poly5'])))
+
+----------------------------------------------------------------------------------------------
+normalization
+
+
+standard scaler
+
+from sklearn.preprocessing import StandardScaler
+ss=StandardScaler()
+train_smote_X_2=train_smote_X
+test_X_2=test_X
+train_smote_X_2[num_cols]=ss.fit_transform(train_smote_X_2[num_cols])
+test_X_2[num_cols]=ss.transform(test_X_2[num_cols])
+
+
+
+minmax scaler
+
+from sklearn.preprocessing import MinMaxScaler
+df_scale = df.copy()
+scale = MinMaxScaler()
+df_scale['Age'] = scale.fit_transform(np.array(df_scale['Age']).reshape(-1, 1))
+df_scale['Fare'] = scale.fit_transform(np.array(df_scale['Fare']).reshape(-1,1))
+df_scale.head()
+
+label = df_scale['Survived']
+df_corr = df_scale.drop(columns=['Survived'])
+df_corr['Label'] = label
+df_corr.head(3)
+corr = df_corr.corr()
+corr2 = corr.iloc[-1:,:]
+plt.figure(figsize=(50, 6))
+ax = sns.heatmap(corr2, annot=True, vmin=-1, vmax=1, center=0)
+bottom, top = ax.get_ylim()
+ax.set_ylim(bottom + 0.5, top - 0.5)
+plt.title('Heatmap Correlation for Survived')
+
+
+
+
+
+
+ss=StandardScaler()
+ss.fit_transform(train_smote_X_2[num_cols])
+
+scale = MinMaxScaler()
+scale.fit_transform(np.array(df_scale['Age']).reshape(-1, 1))
+
+.fit_transform()
+bikin kolom baru : df_corr['Label'] = label
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------
+data partition - train test
+
+
+from sklearn.model_selection import train_test_split
+
+##partition data into data training and data testing
+train,test = train_test_split(data,test_size = 0.20 ,random_state = 111)
+    
+##seperating dependent and independent variables on training and testing data
+train_X = train.drop(labels='Churn',axis=1)
+train_Y = train['Churn']
+test_X  = test.drop(labels='Churn',axis=1)
+test_Y  = test['Churn']
+
+
+
+
+
+from sklearn.model_selection import train_test_split
+X = df.drop(columns=['Survived'])
+y = df['Survived']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
